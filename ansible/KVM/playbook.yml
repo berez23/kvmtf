@@ -1,0 +1,7 @@
+- hosts: virt
+  gather_facts: yes
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - kvm

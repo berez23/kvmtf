@@ -1,0 +1,39 @@
+- name: Install qemu
+  apt:
+   name:
+     - qemu-kvm
+     - libvirt-daemon-system
+     - libvirt-clients
+     - bridge-utils 
+     - virtinst
+     - virt-manager
+     - bridge-utils
+     - libguestfs-tools
+     - libvirt-dev
+   state: latest
+
+-  name: Create a login user
+   user:
+      name: virt
+      groups: kvm, libvirt
+      state: present
+      shell: /bin/bash      # Defaults to /bin/bash
+      system: no             # Defaults to no
+      createhome: yes        # Defaults to yes
+      home: /home/virt
+      generate_ssh_key: yes   # Defaults to /home/<username>
+      ssh_key_type: ecdsa
+
+- name: ensure libvirtd start on boot 
+  service: 
+    name: libvirtd
+    state: started
+    enabled: true 
+
+- name: create directory for disk pools 
+  file: 
+    state: directory
+    path: /home/disk_pool
+    group: libvirt
+    owner: virt
+    recurse: yes  
